@@ -7,9 +7,11 @@ import com.livraison.demo.domain.entity.Tour;
 import com.livraison.demo.domain.entity.Vehicle;
 import com.livraison.demo.domain.entity.Warehouse;
 import com.livraison.demo.domain.enums.DeliveryStatus;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class TourMapper {
     public TourDTO toDTO(Tour tour){
         if(tour == null) return null;

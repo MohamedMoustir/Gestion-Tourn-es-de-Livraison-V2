@@ -1,12 +1,11 @@
 package com.livraison.demo.application.mapper;
 
-import com.livraison.demo.application.dto.VehicleDTO;
 import com.livraison.demo.application.dto.WarehouseDTO;
-import com.livraison.demo.domain.entity.Vehicle;
 import com.livraison.demo.domain.entity.Warehouse;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
-
+@Component
 public class WarehouseMapper {
 
     public WarehouseDTO toDTO(Warehouse warehouse){

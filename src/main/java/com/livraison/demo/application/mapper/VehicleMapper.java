@@ -2,9 +2,11 @@ package com.livraison.demo.application.mapper;
 
 import com.livraison.demo.application.dto.VehicleDTO;
 import com.livraison.demo.domain.entity.Vehicle;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class VehicleMapper {
 
         public VehicleDTO toDTO(Vehicle vehicle){

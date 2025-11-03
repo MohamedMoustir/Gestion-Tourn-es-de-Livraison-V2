@@ -3,7 +3,9 @@ package com.livraison.demo.application.mapper;
 import com.livraison.demo.application.dto.DeliveryDTO;
 import com.livraison.demo.domain.entity.Delivery;
 import com.livraison.demo.domain.enums.DeliveryStatus;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DeliveryMapper {
     public DeliveryDTO toDTO(Delivery delivery){
         if(delivery == null) return null ;
