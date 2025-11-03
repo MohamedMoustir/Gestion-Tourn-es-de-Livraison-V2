@@ -8,6 +8,8 @@ import com.livraison.demo.domain.enums.VehicleType;
 import com.livraison.demo.domain.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.*;
 import jakarta.validation.Valid;
 
@@ -16,12 +18,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Validated
+@Service
 public class VehicleService {
 
     private final VehicleDAO vehicleDAO;
     private final VehicleMapper vehicleMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(VehicleService.class);
-
+    @Autowired
     public VehicleService(VehicleDAO vehicleDAO, VehicleMapper vehicleMapper) {
         this.vehicleDAO = vehicleDAO;
         this.vehicleMapper = vehicleMapper;

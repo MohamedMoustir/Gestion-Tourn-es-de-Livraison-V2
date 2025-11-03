@@ -10,6 +10,8 @@ import com.livraison.demo.domain.exception.VehicleNotDeletedException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -19,12 +21,13 @@ import java.util.stream.Collectors;
 import static org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties.UiService.LOGGER;
 
 @Validated
+@Service
 public class WarehouseService {
 
     private final WarehouseDAO warehouseDAO ;
      private final WarehouseMapper warehouseMapper ;
     private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseService.class);
-
+    @Autowired
     public WarehouseService(WarehouseDAO warehouseDAO, WarehouseMapper warehouseMapper){
         this.warehouseDAO = warehouseDAO ;
         this.warehouseMapper = warehouseMapper;

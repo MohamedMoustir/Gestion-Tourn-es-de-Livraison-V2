@@ -8,16 +8,21 @@ import com.livraison.demo.domain.exception.DeliveryNotDeletedException;
 import com.livraison.demo.domain.exception.VehicleFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Service
 public class DeliveryService {
-        private final DeliveryDAO deliveryDAO;
-       private final DeliveryMapper deliveryMapper;
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeliveryMapper.class);
 
+
+        private final DeliveryDAO deliveryDAO;
+
+        private final DeliveryMapper deliveryMapper;
+        private static final Logger LOGGER = LoggerFactory.getLogger(DeliveryMapper.class);
+    @Autowired
     public DeliveryService(DeliveryDAO deliveryDAO, DeliveryMapper deliveryMapper) {
             this.deliveryDAO = deliveryDAO;
             this.deliveryMapper = deliveryMapper;

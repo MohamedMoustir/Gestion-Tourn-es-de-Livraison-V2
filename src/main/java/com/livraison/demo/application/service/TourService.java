@@ -11,7 +11,9 @@ import com.livraison.demo.domain.exception.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 
 
 @Validated
+@Service
 public class TourService {
 
     private final TourDAO tourDAO ;
@@ -28,7 +31,7 @@ public class TourService {
     private final TourMapper tourMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(TourService.class);
     private final Map<String, TourOptimizer> optimizerMap;
-
+    @Autowired
     public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper, Map<String, TourOptimizer> optimizerMap) {
         this.tourDAO = tourDAO;
         this.vehicleDAO = vehicleDAO;
