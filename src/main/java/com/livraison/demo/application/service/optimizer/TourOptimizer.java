@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface TourOptimizer {
+
     List<Map<String, Object>>  calculateOptimalTour(Tour tour);
 }

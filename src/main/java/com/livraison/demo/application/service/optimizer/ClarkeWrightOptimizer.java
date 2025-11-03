@@ -3,9 +3,11 @@ package com.livraison.demo.application.service.optimizer;
 import com.livraison.demo.domain.entity.Delivery;
 import com.livraison.demo.domain.entity.Tour;
 import com.livraison.demo.domain.entity.Warehouse;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component("nearest")
 public class ClarkeWrightOptimizer implements TourOptimizer {
 
     @Override

@@ -2,9 +2,11 @@ package com.livraison.demo.application.service.optimizer;
 
 import com.livraison.demo.domain.entity.Delivery;
 import com.livraison.demo.domain.entity.Tour;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component("clarke")
 public  class NearestNeighborOptimizer implements TourOptimizer{
 
 
