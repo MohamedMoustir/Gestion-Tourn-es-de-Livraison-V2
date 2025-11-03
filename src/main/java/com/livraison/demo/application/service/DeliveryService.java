@@ -1,0 +1,65 @@
+package com.livraison.demo.application.service;
+
+import com.livraison.demo.application.dto.DeliveryDTO;
+import com.livraison.demo.application.mapper.DeliveryMapper;
+import com.livraison.demo.domain.dao.DeliveryDAO;
+import com.livraison.demo.domain.entity.Delivery;
+import com.livraison.demo.domain.exception.DeliveryNotDeletedException;
+import com.livraison.demo.domain.exception.VehicleFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+public class DeliveryService {
+        private final DeliveryDAO deliveryDAO;
+       private final DeliveryMapper deliveryMapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeliveryMapper.class);
+
+    public DeliveryService(DeliveryDAO deliveryDAO, DeliveryMapper deliveryMapper) {
+            this.deliveryDAO = deliveryDAO;
+            this.deliveryMapper = deliveryMapper;
+        }
+
+        public List<DeliveryDTO> rechercherdelivery() {
+            return deliveryDAO.findAll().stream().map(deliveryMapper::toDTO)
+                    .collect(Collectors.toList());
+        }
+
+        public DeliveryDTO getDeliveryById(Long id) {
+            Delivery delivery = this.deliveryDAO.findById(id);
+            return deliveryMapper.toDTO(delivery);
+        }
+
+        public void deleteDeliveryById(Long id) {
+            try{
+                this.deliveryDAO.deleteById(Math.toIntExact(id));
+               LOGGER.info("suppression Delivery avec successful avec id : {}", id);
+
+            }catch(Exception e){
+                throw new DeliveryNotDeletedException("Error sur suppression Delivery ");
+            }
+        }
+
+        public Delivery updateDelivery(Delivery delivery, Long id) {
+            return this.deliveryDAO.findById(Math.toIntExact(id)).
+                    map(existingDelivry ->{
+                        existingDelivry.setLatitude(delivery.getLatitude());
+                        existingDelivry.setLongitude(delivery.getLongitude());
+                        existingDelivry.setStatus(delivery.getStatus());
+                        existingDelivry.setTimeSlot(delivery.getTimeSlot());
+                        existingDelivry.setVolumeM3(delivery.getVolumeM3());
+                        existingDelivry.setWeightKg(delivery.getWeightKg());
+                        return this.deliveryDAO.save(existingDelivry);
+                    })
+                    .orElseThrow(()->{
+                        LOGGER.warn("Erreur lors de la mise à jour du delivery avec id: {}", delivery.getId());
+                        new VehicleFoundException(
+                                "Vehicle with id " + id + " does not exist"
+                        );
+                        return null;
+                    });
+        }
+}

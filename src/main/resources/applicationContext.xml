@@ -1,0 +1,93 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/data/jpa
+        https://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/util
+        https://www.springframework.org/schema/util/spring-util.xsd">
+
+
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:application.properties"/>
+    </bean>
+
+<!--H2-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${spring.datasource.driver-class-name}"/>
+        <property name="url" value="${spring.datasource.url}"/>
+        <property name="username" value="${spring.datasource.username}"/>
+        <property name="password" value="${spring.datasource.password}"/>
+    </bean>
+
+<!-- EntityManagerFactory -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.livraison.demo.domain.entity"/>
+        <property name="jpaVendorAdapter" >
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties" >
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+
+    <jpa:repositories base-package="com.livraison.demo.domain.dao"
+                      entity-manager-factory-ref="entityManagerFactory"
+                      transaction-manager-ref="transactionManager"/>
+
+    <!--Mapper-->
+    <bean id="DeliveryMapper" class="com.livraison.demo.application.mapper.DeliveryMapper"/>
+    <bean id="TourMapper" class="com.livraison.demo.application.mapper.TourMapper"/>
+    <bean id="VehicleMapper" class="com.livraison.demo.application.mapper.VehicleMapper"/>
+    <bean id="WarehouseMapper" class="com.livraison.demo.application.mapper.WarehouseMapper"/>
+
+
+
+    <bean id="vehicleService" class="com.livraison.demo.application.service.VehicleService">
+        <constructor-arg ref="vehicleDAO"/>
+    </bean>
+
+    <bean id="warehouseService" class="com.livraison.demo.application.service.WarehouseService">
+        <constructor-arg ref="warehouseDAO"/>
+    </bean>
+
+<!--    <bean id="tourService" class="com.livraison.demo.application.service.TourService">-->
+<!--        <constructor-arg ref="tourDAO"/>-->
+<!--    </bean>-->
+    <bean id="deliveryService" class="com.livraison.demo.application.service.DeliveryService">
+        <constructor-arg ref="deliveryDAO"/>
+    </bean>
+
+    <bean id="nearestNeighborOptimizer" class="com.livraison.demo.application.service.optimizer.NearestNeighborOptimizer"/>
+    <bean id="clarkeWrightOptimizer" class="com.livraison.demo.application.service.optimizer.ClarkeWrightOptimizer"/>
+
+    <util:map id="optimizerMap">
+        <entry key="nearest" value-ref="nearestNeighborOptimizer"/>
+        <entry key="clarke" value-ref="clarkeWrightOptimizer"/>
+    </util:map>
+
+
+    <bean id="tourService" class="com.livraison.demo.application.service.TourService">
+        <constructor-arg ref="tourDAO"/>
+        <constructor-arg ref="optimizerMap"/>
+    </bean>
+
+    <context:component-scan base-package="com.livraison.demo" />
+
+</beans>
