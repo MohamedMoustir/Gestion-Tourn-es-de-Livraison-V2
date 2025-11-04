@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="mohamed">
+        <comment>Création de la table Warehouse avec id, nom, adresse et coordonnées</comment>
+        <createTable tableName="warehouse">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)" />
+            <column name="address" type="VARCHAR(255)" />
+            <column name="latitude" type="DECIMAL(10,7)" />
+            <column name="longitude" type="DECIMAL(10,7)" />
+            <column name="opening_time" type="TIME" />
+            <column name="closing_time" type="TIME" />
+        </createTable>
+        <rollback>
+            <dropTable tableName="warehouse"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 2. Création table Vehicle -->
+    <changeSet id="2" author="mohamed">
+        <comment>Création de la table Vehicle avec informations de base</comment>
+        <createTable tableName="vehicle">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="registration_number" type="VARCHAR(15)" />
+            <column name="model" type="VARCHAR(50)" />
+            <column name="type" type="VARCHAR(20)" />
+            <column name="max_weight_kg" type="DOUBLE" />
+            <column name="max_volume_m3" type="DOUBLE" />
+        </createTable>
+        <rollback>
+            <dropTable tableName="vehicle"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 3. Création table Tour -->
+    <changeSet id="3" author="mohamed">
+        <comment>Création de la table  Tour</comment>
+        <createTable tableName="tour">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tour_day" type="TIMESTAMP"/>
+            <column name="total_distance_km" type="DOUBLE"/>
+            <column name="warehouse_id" type="BIGINT"/>
+            <column name="vehicle_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="fk_tour_warehouse"
+                                 baseTableName="tour"
+                                 baseColumnNames="warehouse_id"
+                                 referencedTableName="warehouse"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="fk_tour_vehicle"
+                                 baseTableName="tour"
+                                 baseColumnNames="vehicle_id"
+                                 referencedTableName="vehicle"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropTable tableName="tour"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 4. Création table Delivery -->
+    <changeSet id="4" author="mohamed">
+        <comment>Création de la table Delivery </comment>
+        <createTable tableName="delivery">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>
+            <column name="weight_kg" type="DOUBLE"/>
+            <column name="volume_m3" type="DOUBLE"/>
+            <column name="time_slot" type="VARCHAR(20)"/>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="tour_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="fk_delivery_tour"
+                                 baseTableName="delivery"
+                                 baseColumnNames="tour_id"
+                                 referencedTableName="tour"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropTable tableName="delivery"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 5. Exemple de rollback fonctionnel pour tout le schema -->
+    <changeSet id="5" author="mohamed">
+        <comment>Rollback complet pour tests</comment>
+        <rollback>
+            <dropTable tableName="delivery"/>
+            <dropTable tableName="tour"/>
+            <dropTable tableName="vehicle"/>
+            <dropTable tableName="warehouse"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

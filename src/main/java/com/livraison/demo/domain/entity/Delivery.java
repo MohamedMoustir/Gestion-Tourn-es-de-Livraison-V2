@@ -48,4 +48,8 @@ public class Delivery {
     @JoinColumn(name="tour_id")
     @NotNull(message = "La tournée associée est obligatoire")
     private Tour tour;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id" ,nullable = false)
+    private Customer  customer ;
 }
