@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/warehouse")
+@RequestMapping("api/warehouse")
 public class WarehouseController {
     private WarehouseService warehouseService ;
     private WarehouseMapper warehouseMapper ;
