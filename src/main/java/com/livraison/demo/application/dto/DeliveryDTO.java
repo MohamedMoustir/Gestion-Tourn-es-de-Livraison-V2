@@ -16,4 +16,5 @@ public class DeliveryDTO {
     private String timeSlot;
     private String status;
     private int tourId;
+    private int customerId;
 }
