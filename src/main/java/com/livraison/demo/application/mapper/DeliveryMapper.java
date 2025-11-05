@@ -18,7 +18,9 @@ public class DeliveryMapper {
                 .timeSlot(delivery.getTimeSlot())
                 .status(delivery.getStatus() != null ? delivery.getStatus().name() :null )
                 .tourId(Math.toIntExact(delivery.getTour() != null ? delivery.getTour().getId() : null))
+                .customerId(Math.toIntExact(delivery.getCustomer() != null ? delivery.getCustomer().getId() : null))
                 .build();
+
     }
 
     public Delivery toEntity(DeliveryDTO dto) {

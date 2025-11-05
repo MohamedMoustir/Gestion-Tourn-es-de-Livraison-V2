@@ -18,21 +18,18 @@ public class CustomerMapper {
                  .address(customer.getAddress())
                  .latitude(customer.getLatitude())
                  .longitude(customer.getLongitude())
-                 .preferredTimeSlot(customer.getPreferredTimeSlot())
-                 .delivers(customer.getDelivers() != null ? customer.getDelivers().stream()
-                         .map(d->d.getId().intValue()).collect(Collectors.toList()): new ArrayList<>()).build();
-
+                 .preferredTimeSlot(customer.getPreferredTimeSlot()).build();
     }
 
 
     public Customer toEntity(CustomerDTO dto){
         if(dto == null) return null;
         return Customer.builder()
-                .id(dto.getId())
                 .name(dto.getName())
                 .address(dto.getAddress())
                 .latitude(dto.getLatitude())
-                .longitude(dto.getLongitude()).build();
-
+                .longitude(dto.getLongitude())
+                .preferredTimeSlot(dto.getPreferredTimeSlot())
+                .build();
     }
 }
