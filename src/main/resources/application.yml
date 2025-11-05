@@ -19,5 +19,4 @@ spring:
     enabled: true
     drop-first: false
 
-  servlet:
-    context-path: /api
+
