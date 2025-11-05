@@ -4,7 +4,9 @@ import com.livraison.demo.application.dto.DeliveryDTO;
 import com.livraison.demo.application.mapper.DeliveryMapper;
 import com.livraison.demo.application.service.DeliveryService;
 import com.livraison.demo.domain.entity.Delivery;
+import com.livraison.demo.domain.enums.DeliveryStatus;
 import com.livraison.demo.domain.exception.DeliveryNotDeletedException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -114,6 +116,28 @@ public class DeliveryController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Une erreur interne est survenue : " + e.getMessage()));
         }
+    }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchDeliveries(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size,
+            @RequestParam(defaultValue = "0.0") Double weightKg,
+            @RequestParam(required = false) Double volumeM3,
+            @RequestParam(required = false) DeliveryStatus status
+    ) {
+        try{
+            double safeVolume = (volumeM3 != null) ? volumeM3 : 0.0;
+            List<DeliveryDTO> deliveries = deliveryService.searchDeliveries(page, size, weightKg, safeVolume, status);
+            return ResponseEntity.ok(deliveries);
+        }catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
+        }
+
+
     }
 
 
