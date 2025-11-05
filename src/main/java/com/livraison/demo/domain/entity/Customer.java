@@ -43,6 +43,6 @@ public class Customer {
     private String preferredTimeSlot;
 
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Delivery> delivers;
 }
