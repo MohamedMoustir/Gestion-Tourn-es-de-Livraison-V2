@@ -16,7 +16,7 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/vehicles")
+@RequestMapping("api/vehicles")
 public class VehicleController {
 
     private VehicleService vehicleService ;

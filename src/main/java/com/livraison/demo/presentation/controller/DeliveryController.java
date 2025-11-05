@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/deliveries")
+@RequestMapping("api/deliveries")
 public class DeliveryController {
 
     private  DeliveryMapper deliveryMapper ;
@@ -97,5 +97,24 @@ public class DeliveryController {
         }
     }
 
+    @PatchMapping(path="{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateStatus(@PathVariable Long id ) {
 
-}
+        try{
+            this.deliveryService.updateStatus(id);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(Map.of("success", "Modification effectuée avec succès"));
+        }catch(DeliveryNotDeletedException e){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
+        }catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Une erreur interne est survenue : " + e.getMessage()));
+        }
+    }
+
+
+    }

@@ -17,7 +17,7 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/tours")
+@RequestMapping("api/tours")
 public class TourController {
 
     private TourMapper tourMapper ;
