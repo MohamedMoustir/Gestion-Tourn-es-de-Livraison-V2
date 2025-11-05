@@ -7,9 +7,13 @@ import com.livraison.demo.domain.entity.Delivery;
 import com.livraison.demo.domain.enums.DeliveryStatus;
 import com.livraison.demo.domain.exception.DeliveryNotDeletedException;
 import com.livraison.demo.domain.exception.VehicleFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +39,13 @@ public class DeliveryService {
             return deliveryDAO.findAll().stream().map(deliveryMapper::toDTO)
                     .collect(Collectors.toList());
         }
+
+    public List<DeliveryDTO> searchDeliveries(int pageNumber , int pageSize ,double weightKg,double volumeM3,DeliveryStatus status) {
+        Pageable pageable = PageRequest.of(pageNumber , pageSize);
+        Page<Delivery> deliveries =  deliveryDAO.findByWeightKgOrVolumeM3OrStatus( weightKg,volumeM3,status,pageable);
+        return deliveries.stream().map(deliveryMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
         public DeliveryDTO getDeliveryById(Long id) {
             Delivery delivery = this.deliveryDAO.findById(id);
