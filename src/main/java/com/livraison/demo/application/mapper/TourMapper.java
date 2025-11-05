@@ -2,10 +2,8 @@ package com.livraison.demo.application.mapper;
 
 import com.livraison.demo.application.dto.DeliveryDTO;
 import com.livraison.demo.application.dto.TourDTO;
-import com.livraison.demo.domain.entity.Delivery;
-import com.livraison.demo.domain.entity.Tour;
-import com.livraison.demo.domain.entity.Vehicle;
-import com.livraison.demo.domain.entity.Warehouse;
+import com.livraison.demo.domain.dao.CustomerDAO;
+import com.livraison.demo.domain.entity.*;
 import com.livraison.demo.domain.enums.DeliveryStatus;
 import org.springframework.stereotype.Component;
 
@@ -63,6 +61,7 @@ public class TourMapper {
                                         .volumeM3(d.getVolumeM3())
                                         .timeSlot(d.getTimeSlot())
                                         .status(DeliveryStatus.valueOf(d.getStatus()))
+                                        .customer(d.getCustomerId() != 0 ? Customer.builder().id((long) d.getCustomerId()).build() : null)
                                         .build())
                                 .collect(Collectors.toList()) : null)
                 .build();
