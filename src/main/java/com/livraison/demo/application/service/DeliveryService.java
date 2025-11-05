@@ -4,6 +4,7 @@ import com.livraison.demo.application.dto.DeliveryDTO;
 import com.livraison.demo.application.mapper.DeliveryMapper;
 import com.livraison.demo.domain.dao.DeliveryDAO;
 import com.livraison.demo.domain.entity.Delivery;
+import com.livraison.demo.domain.enums.DeliveryStatus;
 import com.livraison.demo.domain.exception.DeliveryNotDeletedException;
 import com.livraison.demo.domain.exception.VehicleFoundException;
 import org.slf4j.Logger;
@@ -19,14 +20,16 @@ public class DeliveryService {
 
 
         private final DeliveryDAO deliveryDAO;
-
         private final DeliveryMapper deliveryMapper;
+        private final DeliveryHistoryService deliveryHistoryService ;
+
         private static final Logger LOGGER = LoggerFactory.getLogger(DeliveryMapper.class);
     @Autowired
-    public DeliveryService(DeliveryDAO deliveryDAO, DeliveryMapper deliveryMapper) {
+    public DeliveryService(DeliveryDAO deliveryDAO, DeliveryMapper deliveryMapper, DeliveryHistoryService deliveryHistoryService) {
             this.deliveryDAO = deliveryDAO;
             this.deliveryMapper = deliveryMapper;
-        }
+           this.deliveryHistoryService = deliveryHistoryService;
+    }
 
         public List<DeliveryDTO> rechercherdelivery() {
             return deliveryDAO.findAll().stream().map(deliveryMapper::toDTO)
@@ -67,4 +70,13 @@ public class DeliveryService {
                         return null;
                     });
         }
+
+    public void updateStatus(Long id) {
+        Delivery delivery = this.deliveryDAO.findById(Math.toIntExact(id))
+                .orElseThrow(() -> new RuntimeException("Delivery not found"));
+        delivery.setStatus(DeliveryStatus.COMPLETED);
+        deliveryDAO.save(delivery);
+        deliveryHistoryService.createDeliveryHistory(delivery);
+    }
+
 }
