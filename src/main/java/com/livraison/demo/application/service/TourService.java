@@ -30,6 +30,7 @@ public class TourService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TourService.class);
     private final Map<String, TourOptimizer> optimizerMap;
     private final CustomerDAO customerDAO;
+
     @Autowired
     public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper, Map<String, TourOptimizer> optimizerMap, CustomerDAO customerDAO) {
         this.tourDAO = tourDAO;
