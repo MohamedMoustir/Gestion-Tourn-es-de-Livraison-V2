@@ -1,4 +1,10 @@
-package com.livraison.demo.application.service;
+package com.livraison.demo.application.service.optimizer;
 
-public class DeliveryOptimizer {
+
+import com.livraison.demo.domain.entity.DeliveryHistory;
+
+import java.util.List;
+
+public interface DeliveryOptimizer {
+    OptimizedResult optimize(List<DeliveryHistory> histories);
 }
