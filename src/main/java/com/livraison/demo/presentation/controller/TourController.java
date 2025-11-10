@@ -17,7 +17,7 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("api/tours")
+@RequestMapping("/tours")
 public class TourController {
 
     private TourMapper tourMapper ;
@@ -52,8 +52,8 @@ public class TourController {
     @GetMapping(produces=APPLICATION_JSON_VALUE)
     public ResponseEntity<?> recherchertour(){
         try{
-              List<TourDTO> tours = this.tourService.recherchertour();
-              return ResponseEntity.ok(tours);
+            List<TourDTO> tours = this.tourService.recherchertour();
+            return ResponseEntity.ok(tours);
         }catch(TourNotFoundException e){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -83,10 +83,10 @@ public class TourController {
     }
 
     @GetMapping(path="{id}/optimized",produces=APPLICATION_JSON_VALUE )
-    public ResponseEntity<?> getOptimizedTour(@PathVariable Long id ,@RequestParam("algorithm") String type){
+    public ResponseEntity<?> getOptimizedTour(@PathVariable Long id){
         try{
-            List<Map<String, Object>> tours = this.tourService.getOptimizedTour(id ,type);
-           return ResponseEntity.ok(tours);
+            List<Map<String, Object>> tours = this.tourService.getOptimizedTour(id);
+            return ResponseEntity.ok(tours);
         }catch(TourNotFoundException e){
             ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -102,7 +102,7 @@ public class TourController {
     @DeleteMapping(path="{id}",produces=APPLICATION_JSON_VALUE )
     public ResponseEntity<?> deleteTourById(@PathVariable Long id){
         try{
-          this.tourService.deleteTourById(id);
+            this.tourService.deleteTourById(id);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(Map.of("success", "Suppression effectuée avec succès"));
@@ -126,6 +126,7 @@ public class TourController {
                     .body(Map.of("error", "Une erreur sur modification des Tour : " + e.getMessage()));
         }
     }
+
 
 
 }

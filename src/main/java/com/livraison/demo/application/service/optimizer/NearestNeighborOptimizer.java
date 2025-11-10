@@ -2,11 +2,14 @@ package com.livraison.demo.application.service.optimizer;
 
 import com.livraison.demo.domain.entity.Delivery;
 import com.livraison.demo.domain.entity.Tour;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Component("clarke")
+@Component
+@ConditionalOnProperty(name = "optimizer.type", havingValue = "nearest")
 public  class NearestNeighborOptimizer implements TourOptimizer{
 
 

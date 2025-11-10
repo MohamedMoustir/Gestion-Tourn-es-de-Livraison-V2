@@ -4,6 +4,7 @@ import com.livraison.demo.application.dto.DeliveryDTO;
 import com.livraison.demo.application.mapper.DeliveryMapper;
 import com.livraison.demo.application.service.DeliveryService;
 import com.livraison.demo.domain.dao.DeliveryDAO;
+import com.livraison.demo.domain.entity.Customer;
 import com.livraison.demo.domain.entity.Delivery;
 import com.livraison.demo.domain.enums.DeliveryStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +35,21 @@ public class DeliveryTest {
 
     @Test
     void testServiseGetAllDelivrey_Success() {
+        Customer customer = Customer.builder()
+                .id(1L)
+                .name("mohamed")
+                .address("zagoura")
+                .latitude(80.0209)
+                .longitude(-6.8417)
+                .preferredTimeSlot("12:00")
+                .build();
     Delivery delivery = Delivery.builder()
             .latitude(80.0209)
             .longitude(-6.8417)
             .weightKg(0.8)
             .volumeM3(0.02)
             .timeSlot("11:00-13:00")
+            .customer(customer)
             .status(DeliveryStatus.PENDING).build();
 
         DeliveryDTO deliveryDTO = DeliveryDTO.builder()
@@ -49,6 +59,7 @@ public class DeliveryTest {
                 .volumeM3(0.02)
                 .timeSlot("11:00-13:00")
                 .tourId(2)
+                .customerId(Math.toIntExact(customer.getId()))
                 .status(String.valueOf(DeliveryStatus.PENDING)).build();
 
 

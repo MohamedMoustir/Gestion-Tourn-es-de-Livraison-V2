@@ -5,7 +5,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <!-- 1. Création table Warehouse -->
     <changeSet id="1" author="mohamed">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="warehouse"/>
+            </not>
+        </preConditions>
+
         <comment>Création de la table Warehouse avec id, nom, adresse et coordonnées</comment>
         <createTable tableName="warehouse">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -25,6 +32,12 @@
 
     <!-- 2. Création table Vehicle -->
     <changeSet id="2" author="mohamed">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="vehicle"/>
+            </not>
+        </preConditions>
+
         <comment>Création de la table Vehicle avec informations de base</comment>
         <createTable tableName="vehicle">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -43,7 +56,13 @@
 
     <!-- 3. Création table Tour -->
     <changeSet id="3" author="mohamed">
-        <comment>Création de la table  Tour</comment>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tour"/>
+            </not>
+        </preConditions>
+
+        <comment>Création de la table Tour</comment>
         <createTable tableName="tour">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -53,16 +72,19 @@
             <column name="warehouse_id" type="BIGINT"/>
             <column name="vehicle_id" type="BIGINT"/>
         </createTable>
+
         <addForeignKeyConstraint constraintName="fk_tour_warehouse"
                                  baseTableName="tour"
                                  baseColumnNames="warehouse_id"
                                  referencedTableName="warehouse"
                                  referencedColumnNames="id"/>
+
         <addForeignKeyConstraint constraintName="fk_tour_vehicle"
                                  baseTableName="tour"
                                  baseColumnNames="vehicle_id"
                                  referencedTableName="vehicle"
                                  referencedColumnNames="id"/>
+
         <rollback>
             <dropTable tableName="tour"/>
         </rollback>
@@ -70,7 +92,13 @@
 
     <!-- 4. Création table Delivery -->
     <changeSet id="4" author="mohamed">
-        <comment>Création de la table Delivery </comment>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="delivery"/>
+            </not>
+        </preConditions>
+
+        <comment>Création de la table Delivery</comment>
         <createTable tableName="delivery">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -83,17 +111,19 @@
             <column name="status" type="VARCHAR(20)"/>
             <column name="tour_id" type="BIGINT"/>
         </createTable>
+
         <addForeignKeyConstraint constraintName="fk_delivery_tour"
                                  baseTableName="delivery"
                                  baseColumnNames="tour_id"
                                  referencedTableName="tour"
                                  referencedColumnNames="id"/>
+
         <rollback>
             <dropTable tableName="delivery"/>
         </rollback>
     </changeSet>
 
-    <!-- 5. Exemple de rollback fonctionnel pour tout le schema -->
+    <!-- 5. Rollback global -->
     <changeSet id="5" author="mohamed">
         <comment>Rollback complet pour tests</comment>
         <rollback>

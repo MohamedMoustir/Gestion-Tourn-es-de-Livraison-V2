@@ -36,7 +36,6 @@ public class VehicleService {
         if (checkvehicle == null) {
 
             applyVehicleConstraints(vehicle);
-            System.out.println("Vehicle =================>" +vehicle);
             this.vehicleDAO.save(vehicle);
             LOGGER.info("Creating vehicle: {}", vehicle.getRegistrationNumber());
         } else {
@@ -91,6 +90,7 @@ public class VehicleService {
     }
 
     private void applyVehicleConstraints(Vehicle vehicle){
+        System.out.println("========> " + vehicle.getType());
         switch (vehicle.getType()) {
             case BIKE -> {
                 vehicle.setMaxWeightKg(50.0);
