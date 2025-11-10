@@ -38,6 +38,8 @@ logging:
     root: INFO
     com.livraison.demo: DEBUG
 
+  git add .
+  git commit -m "Save current changes before rebase"
 
 optimizer:
   type: ai
