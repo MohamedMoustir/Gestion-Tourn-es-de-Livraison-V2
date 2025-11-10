@@ -4,7 +4,8 @@ import com.livraison.demo.domain.entity.DeliveryHistory;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Optimizer {
-    Mono<String> optimize(List<DeliveryHistory> deliveryHistories);
+    Mono<List<Map<String, Object>>> optimize(List<DeliveryHistory> deliveryHistories);
 }
