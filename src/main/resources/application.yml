@@ -1,3 +1,4 @@
+
 server:
   port: 9090
 
@@ -8,15 +9,36 @@ spring:
   profiles:
     active: dev
 
+
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
     username: sa
     password:
 
+
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
     drop-first: false
 
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+
+  ai:
+    openai:
+      api-key: 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
+
+logging:
+  level:
+    root: INFO
+    com.livraison.demo: DEBUG
+
+
+optimizer:
+  type: ai
 
