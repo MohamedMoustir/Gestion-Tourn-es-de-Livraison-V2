@@ -31,7 +31,7 @@ spring:
 
   ai:
     openai:
-      api-key: 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
+      api-key: ${OPENAI_API_KEY}
 
 logging:
   level:
