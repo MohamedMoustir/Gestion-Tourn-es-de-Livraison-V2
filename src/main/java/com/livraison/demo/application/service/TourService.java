@@ -2,6 +2,8 @@ package com.livraison.demo.application.service;
 
 import com.livraison.demo.application.dto.TourDTO;
 import com.livraison.demo.application.mapper.TourMapper;
+import com.livraison.demo.application.service.optimizer.ClarkeWrightOptimizer;
+import com.livraison.demo.application.service.optimizer.NearestNeighborOptimizer;
 import com.livraison.demo.application.service.optimizer.TourOptimizer;
 import com.livraison.demo.domain.dao.*;
 import com.livraison.demo.domain.entity.*;
@@ -9,13 +11,12 @@ import com.livraison.demo.domain.exception.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -28,53 +29,39 @@ public class TourService {
     private final WarehouseDAO warehouseDAO ;
     private final TourMapper tourMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(TourService.class);
-    private final Map<String, TourOptimizer> optimizerMap;
-    private final CustomerDAO customerDAO;
-    @Autowired
-    public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper, Map<String, TourOptimizer> optimizerMap, CustomerDAO customerDAO) {
+    private final TourOptimizer optimizer;
+
+    public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper, TourOptimizer optimizer) {
         this.tourDAO = tourDAO;
         this.vehicleDAO = vehicleDAO;
         this.warehouseDAO = warehouseDAO;
         this.tourMapper = tourMapper;
-        this.optimizerMap = optimizerMap;
-        this.customerDAO = customerDAO;
+        this.optimizer = optimizer;
     }
 
 
-    public void createTour(@Valid Tour tour) {
+    public Tour createTour(@Valid Tour tour) {
+
 
         Warehouse warehouse = warehouseDAO.findById(Math.toIntExact(tour.getWarehouse().getId()))
-                .orElseThrow(() -> new RuntimeException("Warehouse not found"));
+                .orElseThrow(()-> new RuntimeException("Warehouse not found"));
 
-
-        Vehicle vehicle = vehicleDAO.findById(tour.getVehicle().getId())
-                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
-
-        Customer firstCustomer = tour.getDeliveries().stream()
-                .map(Delivery::getCustomer)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        Vehicle vehicle  = vehicleDAO.findById(tour.getVehicle().getId())
+                .orElseThrow(()-> new RuntimeException("Vehicle not found") );
 
 
         if (calculWeightKg(tour) > vehicle.getMaxWeightKg() || calculVolumeM3(tour) > vehicle.getMaxVolumeM3()) {
-            throw new TourExccdsException("Tour exceeds vehicle maximum weight or volume");
+            throw new TourExccdsException("Tour exceeds vehicle maximum weight");
         }
 
         tour.setWarehouse(warehouse);
         tour.setVehicle(vehicle);
 
-        if (tour.getDeliveries() != null) {
-            tour.getDeliveries().forEach(d -> {
-                d.setTour(tour);
-                d.setCustomer(firstCustomer);
-                System.out.println("================>" + d.getVolumeM3());
-            });
-
-        }
+        if(tour.getDeliveries() != null) tour.getDeliveries().forEach(d->d.setTour(tour));
 
         Tour savedTour = tourDAO.save(tour);
         LOGGER.info("Tour created with ID: {}", savedTour.getId());
+        return savedTour;
     }
 
 
@@ -101,46 +88,43 @@ public class TourService {
 
     public void updateTour(  Tour tour, Long id) {
         Tour checkingTour =   tourDAO.findById(Math.toIntExact(id))
-                 .orElseThrow(() -> new TourNotFoundException("tour with id " + id + " does not exist"));
-                    checkingTour.setTour_day(tour.getTour_day());
-                    checkingTour.setTotal_distance_km(tour.getTotal_distance_km());
-                     this.tourDAO.save(checkingTour);
+                .orElseThrow(() -> new TourNotFoundException("tour with id " + id + " does not exist"));
+        checkingTour.setTour_day(tour.getTour_day());
+        checkingTour.setTotal_distance_km(tour.getTotal_distance_km());
+        this.tourDAO.save(checkingTour);
 
     }
 
-    public List<Map<String, Object>> getOptimizedTour(Long id, String type) {
+    public List<Map<String, Object>> getOptimizedTour(Long id) {
         Tour tour = tourDAO.findDeliverieById(id);
         if (tour == null) {
             throw new RuntimeException("Tour with id " + id + " not found");
         }
 
-        TourOptimizer optimizer = optimizerMap.get(type);
         if (optimizer == null) {
-            throw new IllegalArgumentException("Unknown optimizer type: " + type);
+            throw new IllegalStateException("No optimizer configured in TourService");
         }
 
         return optimizer.calculateOptimalTour(tour);
     }
 
 
-
-
-     public static double calculWeightKg(Tour tour){
+    public static double calculWeightKg(Tour tour){
 
 
         double sum = tour.getDeliveries().stream()
                 .mapToDouble(Delivery::getWeightKg)
                 .sum();
-         return sum;
-     }
+        return sum;
+    }
 
-     public static double calculVolumeM3(Tour tour){
-         double sum = tour.getDeliveries().stream()
-                 .mapToDouble(Delivery::getVolumeM3)
-                 .sum();
+    public static double calculVolumeM3(Tour tour){
+        double sum = tour.getDeliveries().stream()
+                .mapToDouble(Delivery::getVolumeM3)
+                .sum();
 
-         return sum;
-     }
+        return sum;
+    }
 
 
 
