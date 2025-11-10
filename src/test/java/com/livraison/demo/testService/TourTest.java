@@ -34,6 +34,9 @@ public class TourTest {
 
     @Mock
     private VehicleDAO vehicleDAO;
+
+    @Mock
+    private CustomerDAO customerDAO;
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
@@ -41,8 +44,12 @@ public class TourTest {
 
 
     @Test
-    void testServiseCreateTour_Success() {
-        Warehouse warehouse = Warehouse.builder().id(1L).name("Main Warehouse").build();
+    void testCreateTour_Success() {
+        Warehouse warehouse = Warehouse.builder()
+                .id(1L)
+                .name("Main Warehouse")
+                .build();
+
         Vehicle vehicle = Vehicle.builder()
                 .id(1L)
                 .model("micor")
@@ -51,6 +58,14 @@ public class TourTest {
                 .maxVolumeM3(40.0)
                 .build();
 
+        Customer customer = Customer.builder()
+                .id(1L)
+                .name("mohamed")
+                .address("zagoura")
+                .latitude(80.0209)
+                .longitude(-6.8417)
+                .preferredTimeSlot("12:00")
+                .build();
 
         Tour tour = Tour.builder()
                 .tour_day(LocalDateTime.parse("2025-10-25T08:30:00"))
@@ -66,13 +81,15 @@ public class TourTest {
                 .longitude(-6.8417)
                 .weightKg(0.8)
                 .volumeM3(0.02)
-                .status(DeliveryStatus.valueOf("PENDING"))
+                .status(DeliveryStatus.PENDING)
                 .tour(tour)
+                .customer(customer)
                 .build();
         tour.getDeliveries().add(delivery);
 
         when(warehouseDAO.findById(1)).thenReturn(Optional.of(warehouse));
         when(vehicleDAO.findById(1L)).thenReturn(Optional.of(vehicle));
+        when(customerDAO.findById(1)).thenReturn(Optional.of(customer));
         when(tourDAO.save(Mockito.any(Tour.class))).thenReturn(tour);
 
         tourService.createTour(tour);
