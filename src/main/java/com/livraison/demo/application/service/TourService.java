@@ -11,6 +11,7 @@ import com.livraison.demo.domain.exception.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -31,7 +32,7 @@ public class TourService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TourService.class);
     private final TourOptimizer optimizer;
 
-    public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper, TourOptimizer optimizer) {
+    public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper,@Qualifier("deepseekClient") TourOptimizer optimizer) {
         this.tourDAO = tourDAO;
         this.vehicleDAO = vehicleDAO;
         this.warehouseDAO = warehouseDAO;
