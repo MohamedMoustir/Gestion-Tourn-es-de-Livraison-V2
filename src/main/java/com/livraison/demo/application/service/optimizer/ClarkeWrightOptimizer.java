@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Component
-@ConditionalOnProperty(name = "optimizer.type", havingValue = "clarke", matchIfMissing = true)
+//@ConditionalOnProperty(name = "optimizer.type", havingValue = "clarke", matchIfMissing = true)
 public class ClarkeWrightOptimizer implements TourOptimizer {
 
     @Override

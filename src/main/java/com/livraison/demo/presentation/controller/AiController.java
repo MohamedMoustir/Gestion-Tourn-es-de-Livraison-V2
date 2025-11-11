@@ -33,5 +33,7 @@ public class AiController {
         return aiOptimizer.calculateOptimalTour(tour);
     }
 
+
+
 }
 
