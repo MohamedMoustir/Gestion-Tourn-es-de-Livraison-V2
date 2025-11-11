@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Component
-@ConditionalOnProperty(name = "optimizer.type", havingValue = "nearest")
+//@ConditionalOnProperty(name = "optimizer.type", havingValue = "nearest")
 public  class NearestNeighborOptimizer implements TourOptimizer{
 
 

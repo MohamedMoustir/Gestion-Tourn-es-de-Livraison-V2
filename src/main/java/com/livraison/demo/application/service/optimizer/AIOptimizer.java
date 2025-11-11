@@ -5,29 +5,29 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.livraison.demo.application.dto.DeliveryDTO;
 import com.livraison.demo.domain.entity.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
 import java.util.*;
 
 @Service
-@ConditionalOnProperty(name="optimizer.type" , havingValue ="ai")
+//@ConditionalOnProperty(name="optimizer.type" , havingValue ="ai")
+@Slf4j
 public class AIOptimizer implements TourOptimizer  {
     private final WebClient webClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-
     public AIOptimizer(@Value("${spring.ai.openai.api-key}") String apiKey) {
+
+        log.error("API KEY: {}", apiKey);
         this.webClient = WebClient.builder()
                 .baseUrl("https://api.openai.com/v1/responses")
                 .defaultHeader("Authorization", "Bearer " + apiKey)
                 .defaultHeader("Content-Type", "application/json")
                 .build();
     }
-
 
 
     @Override
@@ -115,7 +115,7 @@ Important :
                     }
                 }
             } catch (Exception e) {
-                System.err.println("⚠ Failed to parse AI output JSON: " + e.getMessage());
+                System.err.println(" Failed to parse AI output JSON: " + e.getMessage());
             }
 
             tourMap.put("recommendations", aiOutput.getOrDefault("recommendations", List.of()));
@@ -124,7 +124,7 @@ Important :
             return List.of(tourMap);
 
         } catch (Exception e) {
-            throw new RuntimeException("❌ AIOptimizer failed: " + e.getMessage(), e);
+            throw new RuntimeException("AIOptimizer failed: " + e.getMessage(), e);
         }
     }
 

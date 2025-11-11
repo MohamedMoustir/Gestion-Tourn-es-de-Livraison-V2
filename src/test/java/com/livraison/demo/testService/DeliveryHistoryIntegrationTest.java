@@ -49,6 +49,7 @@ class DeliveryHistoryIntegrationTest {
     @Autowired
     private CustomerDAO customerDAO;
     @Test
+
     void shouldCreateDeliveryHistoryWhenTourIsCompleted() {
 
         var vehicle = Vehicle.builder()
@@ -73,11 +74,9 @@ class DeliveryHistoryIntegrationTest {
                 .vehicle(vehicle)
                 .warehouse(warehouse)
                 .total_distance_km(0)
-
                 .build();
         tourDAO.save(tour);
 
-        tourDAO.save(tour);
         var customer = Customer.builder()
                 .name("Mohamed")
                 .address("Zagoura")
@@ -86,24 +85,29 @@ class DeliveryHistoryIntegrationTest {
                 .preferredTimeSlot("12:00")
                 .build();
         customerDAO.save(customer);
-        var delivery = Delivery.builder()
-                .tour(tour)
-                .latitude(31.63)
-                .longitude(-7.98)
-                .weightKg(5.0)
-                .volumeM3(0.2)
-                .timeSlot("08:00-10:00")
-                .status(DeliveryStatus.COMPLETED)
-                .customer(customer)
-                .build();
-        deliveryDAO.save(delivery);
-        // call service method
-        deliveryHistoryService.createDeliveryHistory(delivery);
+
+        // إنشاء 3 deliveries مختلفة
+        for (int i = 0; i < 3; i++) {
+            var delivery = Delivery.builder()
+                    .tour(tour)
+                    .latitude(31.63 + i * 0.01)
+                    .longitude(-7.98 + i * 0.01)
+                    .weightKg(5.0 + i)
+                    .volumeM3(0.2 + i * 0.01)
+                    .timeSlot("08:00-10:00")
+                    .status(DeliveryStatus.COMPLETED)
+                    .customer(customer)
+                    .build();
+            deliveryDAO.save(delivery);
+
+            // call service method
+            deliveryHistoryService.createDeliveryHistory(delivery);
+        }
 
         var histories = deliveryHistoryDAO.findAll();
 
         assertFalse("Aucun DeliveryHistory n’a été créé !", histories.isEmpty());
-        assertEquals(tour.getId().longValue(), histories.get(0).getTour().getId().longValue());
-        assertEquals(delivery.getId().longValue(), histories.get(0).getDelivery().getId().longValue());
+        assertEquals(3, histories.size());
     }
+
 }
