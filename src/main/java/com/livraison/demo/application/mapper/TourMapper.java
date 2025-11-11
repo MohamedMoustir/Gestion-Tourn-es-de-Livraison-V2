@@ -7,6 +7,7 @@ import com.livraison.demo.domain.entity.*;
 import com.livraison.demo.domain.enums.DeliveryStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,7 +25,7 @@ public class TourMapper {
                     .deliverys(tour.getDeliveries() != null ?
                                     tour.getDeliveries().stream()
                                             .map(d -> DeliveryDTO.builder()
-                                                    .id(d.getId())
+                                                    .id(d.getId() != null ? d.getId() : UUID.randomUUID().getMostSignificantBits())
                                                     .latitude(d.getLatitude())
                                                     .longitude(d.getLongitude())
                                                     .weightKg(d.getWeightKg())
