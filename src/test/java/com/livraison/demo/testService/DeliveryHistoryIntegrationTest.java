@@ -8,15 +8,21 @@ import com.livraison.demo.domain.entity.*;
 import com.livraison.demo.domain.enums.DeliveryStatus;
 import com.livraison.demo.domain.enums.VehicleType;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.util.AssertionErrors.assertFalse;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -110,4 +116,11 @@ class DeliveryHistoryIntegrationTest {
         assertEquals(3, histories.size());
     }
 
+//    @Test
+//    void getAllDeliveryHistoryTest() {
+//        when(deliveryHistoryDAO.findAll()).thenReturn(new ArrayList<DeliveryHistory>());
+//        List<DeliveryHistory> deliveryHistories = deliveryHistoryDAO.findAll();
+//        assertThat(deliveryHistories).isEmpty();
+//        Mockito.verify(deliveryHistoryDAO, Mockito.times(1)).findAll();
+//    }
 }
