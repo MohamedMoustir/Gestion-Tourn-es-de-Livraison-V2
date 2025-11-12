@@ -4,7 +4,6 @@ import com.livraison.demo.application.dto.TourDTO;
 import com.livraison.demo.application.mapper.DeliveryHistoryMapper;
 import com.livraison.demo.application.mapper.TourMapper;
 import com.livraison.demo.application.service.DeepseekClient;
-import com.livraison.demo.application.service.optimizer.AIOptimizer;
 import com.livraison.demo.domain.entity.Tour;
 import org.springframework.web.bind.annotation.*;
 

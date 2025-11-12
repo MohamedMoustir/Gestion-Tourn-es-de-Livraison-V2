@@ -10,6 +10,7 @@ import com.livraison.demo.domain.enums.VehicleType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertFalse;
@@ -19,6 +20,7 @@ import java.time.LocalTime;
 
 @SpringBootTest
 @Transactional
+@Rollback(true)
 class DeliveryHistoryIntegrationTest {
 
     @Autowired
@@ -86,7 +88,6 @@ class DeliveryHistoryIntegrationTest {
                 .build();
         customerDAO.save(customer);
 
-        // إنشاء 3 deliveries مختلفة
         for (int i = 0; i < 3; i++) {
             var delivery = Delivery.builder()
                     .tour(tour)
@@ -100,7 +101,6 @@ class DeliveryHistoryIntegrationTest {
                     .build();
             deliveryDAO.save(delivery);
 
-            // call service method
             deliveryHistoryService.createDeliveryHistory(delivery);
         }
 

@@ -32,7 +32,7 @@ public class TourService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TourService.class);
     private final TourOptimizer optimizer;
 
-    public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper,@Qualifier("deepseekClient") TourOptimizer optimizer) {
+    public TourService(TourDAO tourDAO, VehicleDAO vehicleDAO, WarehouseDAO warehouseDAO, TourMapper tourMapper, TourOptimizer optimizer) {
         this.tourDAO = tourDAO;
         this.vehicleDAO = vehicleDAO;
         this.warehouseDAO = warehouseDAO;

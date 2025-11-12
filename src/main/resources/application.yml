@@ -31,7 +31,7 @@ spring:
 
   ai:
     openai:
-      api-key:
+      api-key: sk-a4f186bf4719447c8bdbc0c6397a0617
 
 logging:
   level:

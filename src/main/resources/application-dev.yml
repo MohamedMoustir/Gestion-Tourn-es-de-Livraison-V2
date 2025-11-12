@@ -10,13 +10,13 @@ spring:
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       show-sql: true
 
 
   ai:
     deepseek:
-      api-key:
+      api-key: sk-a4f186bf4719447c8bdbc0c6397a0617
       chat:
         options:
           model: deepseek-chat

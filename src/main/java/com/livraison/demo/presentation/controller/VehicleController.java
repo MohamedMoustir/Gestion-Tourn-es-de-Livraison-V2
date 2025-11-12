@@ -36,6 +36,7 @@ public class VehicleController {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(Map.of("success", "Vehicle created"));
+
         }catch(VehicleNotDeletedException e){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -51,9 +52,7 @@ public class VehicleController {
     public ResponseEntity<?> recherchervehicle(){
        try{
            List<VehicleDTO> vehicle =  this.vehicleService.recherchervehicle();
-           return ResponseEntity
-                   .status(HttpStatus.CREATED)
-                   .body(Map.of("success", "Vehicle updated"));
+           return ResponseEntity.ok(vehicle);
        }catch(VehicleNotDeletedException e){
            return ResponseEntity
                    .status(HttpStatus.NOT_FOUND)
