@@ -16,7 +16,7 @@ spring:
 
   ai:
     deepseek:
-      api-key: ''
+      api-key:
       chat:
         options:
           model: deepseek-chat
